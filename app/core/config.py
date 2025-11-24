@@ -1,7 +1,7 @@
 
 from pydantic_settings import BaseSettings
 
-class Setting(BaseSettings):
+class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./coworking.db"
 
     class Config:
