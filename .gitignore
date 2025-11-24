@@ -18,3 +18,4 @@ __pycache__/
 # Otros
 .env
 .DS_Store
+scripts/create_db.py
