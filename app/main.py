@@ -1,6 +1,7 @@
 
 from fastapi import FastAPI
 from app.api.routers.health import router as health_router
+from app.api.routers.tools import router as tools_router
 
 # fastapi dev app/main.py --reload  
 
@@ -13,6 +14,7 @@ app = FastAPI(
 
 # Incluir routers
 app.include_router(health_router)
+app.include_router(tools_router)
 
 
 
