@@ -19,7 +19,7 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
 
     # Relación con Reservation
-    reservation = relationship("Reservation", back_populates="user")
+    reservations = relationship("Reservation", back_populates="user")
 
 
     def __repr__(self):
