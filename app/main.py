@@ -2,19 +2,21 @@
 from fastapi import FastAPI
 from app.api.routers.health import router as health_router
 from app.api.routers.tools import router as tools_router
+from app.api.routers.users import router as users_router
 
 # fastapi dev app/main.py --reload  
 
 app = FastAPI(
-    title="Shared Tools Reservation API",
-    description="API para gestionar la reserva de herramientas compartidas en un makerspace.",
-    version="0.1.0", # Informativa a nivel de documentación FastAPI
+    title="Coworking Tools API",
+    description="API para gestionar usuarios, herramientas y reservas.",
+    version="0.3.0", # Informativa a nivel de documentación FastAPI
 )
 
 
 # Incluir routers
 app.include_router(health_router)
 app.include_router(tools_router)
+app.include_router(users_router)
 
 
 
