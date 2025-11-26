@@ -38,7 +38,8 @@ def get_user_by_id(db: Session, user_id: int) -> User | None:
 #    Obtener todos los usuarios
 # --------------------------------
 def get_all_users(db: Session) -> list[User]:
-    return db.scalar(select(User)).all()
+    return db.scalars(select(User)).all()
+
 
 
 # -------------------------------------------
