@@ -57,13 +57,31 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
 - Integración del router de Tools en `main.py`.
 - Documentación automática en OpenAPI.
 
-### 🛠 Mejorado
+#### 🛠 Mejorado
 - Validación y manejo de errores con `HTTPException`.
 - Actualización parcial de modelos usando `exclude_unset=True`.
 
-### 🧪 Probado
+#### 🧪 Probado
 - Endpoints probados correctamente con Thunder Client.
 - Casos normales: creación, consulta, actualización y borrado.
+
+---
+### [v0.4.0] - 2025-xx-xx
+#### 🚀 Añadido
+- Schemas completos para Users
+- CRUD con hashing de contraseña y validación email único
+- Router REST con endpoints de creación, listado, detalle y actualización
+- Integración de Users a la API
+
+#### 🔐 Seguridad
+- Contraseñas hasheadas con bcrypt
+- Nunca se expone password en la API
+
+#### 🧪 Probado
+- POST /users/ (creación)
+- GET /users/ (listado)
+- GET /users/{id}
+- PUT /users/{id}
 
 ---
 
