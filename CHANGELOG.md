@@ -85,6 +85,26 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
 
 ---
 
+### [v0.5.0] - 2025-xx-xx
+#### 🚀 Añadido
+- Sistema completo de reservas
+- Validación anti-solapamiento
+- Endpoints CRUD para Reservations
+- Integración con Users y Tools
+
+#### 🧠 Reglas de negocio
+- No se permiten reservas activas que se superpongan en tiempo
+- Validación de fechas tanto en creación como en actualización
+
+#### 🧪 Probado
+- POST /reservations
+- GET /reservations
+- GET /reservations/{id}
+- PUT /reservations/{id}
+- DELETE /reservations/{id}
+
+---
+
 ### ⭐ Notas
 - Este proyecto sigue GitFlow:  
 `main` → versiones estables  
