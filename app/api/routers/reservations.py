@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.auth import get_current_user
 from app.core.database import get_db
 from app.schemas.reservation import (
     ReservationCreate, ReservationResponse, ReservationUpdate
@@ -26,7 +27,11 @@ router = APIRouter(
 #    POST -> Crear reserva (con anti-solapamiento)
 # ---------------------------------------------------
 @router.post("/", response_model=ReservationResponse, status_code=201)
-def new_reservation(data: ReservationCreate, db: Session = Depends(get_db)):
+def new_reservation(
+    data: ReservationCreate,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user)
+):
     
     try:
         reservation = create_reservation(db, data)
