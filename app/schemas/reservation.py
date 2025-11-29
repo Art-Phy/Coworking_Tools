@@ -40,7 +40,7 @@ class ReservationResponse(ReservationBase):
     status: str = Field(default="active", description="active | cancelled")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 

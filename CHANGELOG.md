@@ -105,6 +105,14 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
 
 ---
 
+### [0.6.0] - Autenticación y JWT
+- Implementado login con Form Data
+- Generación y validación de tokens JWT
+- Endpoints protegidos mediante `get_current_user`
+- Reservas requieren autenticación Bearer
+
+---
+
 ### ⭐ Notas
 - Este proyecto sigue GitFlow:  
 `main` → versiones estables  

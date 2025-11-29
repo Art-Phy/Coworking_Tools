@@ -4,6 +4,7 @@ from app.api.routers.health import router as health_router
 from app.api.routers.tools import router as tools_router
 from app.api.routers.users import router as users_router
 from app.api.routers.reservations import router as reservations_router
+from app.api.routers.auth import router as auth_router
 
 
 # fastapi dev app/main.py --reload  
@@ -20,6 +21,7 @@ app.include_router(health_router)
 app.include_router(tools_router)
 app.include_router(users_router)
 app.include_router(reservations_router)
+app.include_router(auth_router)
 
 
 @app.get("/health")
