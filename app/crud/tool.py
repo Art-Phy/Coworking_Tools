@@ -29,7 +29,7 @@ def get_all_tools(db: Session) -> list[Tool]:
     """
     Obtiene todas las herramientas registradas en la base de datos.
     """
-    return db.scalar(select(Tool)).all()
+    return db.scalars(select(Tool)).all()
 
 
 def create_tool(db: Session, tool_data: ToolCreate) -> Tool:

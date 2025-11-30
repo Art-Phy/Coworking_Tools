@@ -1,7 +1,7 @@
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.roles import require_admin
 from app.core.database import get_db
 from app.schemas.tool import ToolCreate, ToolUpdate, ToolResponse
 from app.crud.tool import (
@@ -18,30 +18,47 @@ router = APIRouter(
 )
 
 
-# ---------------------------------------
-#    POST /tools/ -> Crear herramienta
-# ---------------------------------------
+# ----------------------------------------------------
+#    POST /tools/ -> Crear herramienta (ADMIN ONLY)
+# ----------------------------------------------------
 @router.post("/", response_model=ToolResponse, status_code=status.HTTP_201_CREATED)
-def create_new_tool(tool_data: ToolCreate, db: Session = Depends(get_db)):
+def create_new_tool(
+    tool_data: ToolCreate,
+    db: Session = Depends(get_db),
+    current_user = Depends(require_admin)
+):
     """
-    Crea una nueva herramienta en el sistema.
+    Crea una nueva herramienta.
 
-    - Valida automáticamente el body gracias a ToolCreate.
-    - Comprueba si ya existe una herramienta con ese nombre (opcional, por ahora no).
-    - Devuelve la herramienta creada con su ID asignado.
+    Roles:
+    - Solo usuarios con permiso admin pueden acceder.
     """
     new_tool = create_tool(db, tool_data)
     return new_tool
 
 
-# ----------------------------------------
-#    GET /tools/ -> Listar herramientas
-# ----------------------------------------
+
+# --------------------------------------------------
+#    GET /tools/ -> Listar todas las herramientas
+# --------------------------------------------------
+@router.get("/", response_model=list[ToolResponse])
+def list_tools(db: Session = Depends(get_db)):
+    """
+    Devuelve una lista con todas las herramientas registradas.
+    Accesible para cualquier usuario (no requiere admin por ahora).
+    """
+    return get_all_tools(db)
+
+
+
+# ----------------------------------------------------
+#    GET /tools/{id} -> Obtener herramienta (Todos)
+# ----------------------------------------------------
 @router.get("/{tool_id}", response_model=ToolResponse)
 def get_tool(tool_id: int, db: Session = Depends(get_db)):
     """
-    Obtiene una herramienta por su ID.
-    Lanza error 401 si no existe.
+    Obtiene una herramienta por ID.
+    Disponible para cualquier usuario autenticado o no (por ahora).
     """
     tool = get_tool_by_id(db, tool_id)
     if not tool:
@@ -52,14 +69,19 @@ def get_tool(tool_id: int, db: Session = Depends(get_db)):
     return tool
 
 
-# ----------------------------------------------------
-#    PUT /tools/{tool_id} -> Actualizar herramienta
-# ----------------------------------------------------
+# --------------------------------------------------------
+#    PUT /tools/{id} -> Editar herramienta (ADMIN ONLY)
+# --------------------------------------------------------
 @router.put("/{tool_id}", response_model=ToolResponse)
-def update_existing_tool(tool_id: int, update_data: ToolUpdate, db: Session = Depends(get_db)):
+def update_existing_tool(
+    tool_id: int,
+    update_data: ToolUpdate,
+    db: Session = Depends(get_db),
+    current_user = Depends(require_admin)
+):
     """
-    Actualiza los datos de una herramienta existente.
-    Si la herramienta no existe -> 404.
+    Actualiza los datos de una herramienta.
+    Solo administradores pueden modificar.
     """
     db_tool = get_tool_by_id(db, tool_id)
     if not db_tool:
@@ -67,19 +89,21 @@ def update_existing_tool(tool_id: int, update_data: ToolUpdate, db: Session = De
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No existe una herramienta con ID {tool_id}."
         )
-    
-    updated_tool = update_tool(db, db_tool, update_data)
-    return updated_tool
+    return update_tool(db, db_tool, update_data)
 
 
-# -----------------------------------------------------
-#    DELETE /tools/{tool_id} -> Eliminar herramienta
-# -----------------------------------------------------
+# -------------------------------------------------------------
+#    DELETE /tools/{id} -> Eliminar herramienta (ADMIN ONLY)
+# -------------------------------------------------------------
 @router.delete("/{tool_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_existing_tool(tool_id: int, db: Session = Depends(get_db)):
+def delete_existing_tool(
+    tool_id: int,
+    db: Session = Depends(get_db),
+    current_user = Depends(require_admin)
+):
     """
-    Elimina una herramienta de la base de datos.
-    Si no existe -> 404.
+    Elimina una herramienta.
+    Solo administradores pueden borrar.
     """
     db_tool = get_tool_by_id(db, tool_id)
     if not db_tool:
@@ -87,6 +111,6 @@ def delete_existing_tool(tool_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"No existe una herramienta con ID {tool_id}."
         )
-    
     delete_tool(db, db_tool)
     return None
+
