@@ -2,6 +2,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.roles import require_owner_or_admin
+from app.core.roles import require_admin
+from app.core.auth import get_current_user
 from app.core.auth import get_current_user
 from app.core.database import get_db
 from app.schemas.reservation import (
@@ -45,14 +48,18 @@ def new_reservation(
 
 
 
-# ----------------------------------------
-#    # GET -> Listar todas las reservas
-# ----------------------------------------
+# ---------------------------------------------------
+#    GET -> Listar todas las reservas (solo admin)
+# ---------------------------------------------------
 @router.get("/", response_model=list[ReservationResponse])
-def list_resercations(db: Session = Depends(get_db)):
+def list_reservations(
+    db: Session = Depends(get_db),
+    current_user = Depends(require_admin)  # ⬅ ahora solo admin
+):
     from sqlalchemy import select
     from app.models import Reservation
     return db.scalars(select(Reservation)).all()
+
 
 
 
@@ -89,11 +96,21 @@ def reservations_by_tool(tool_id: int, db: Session = Depends(get_db)):
 
 
 
-# ----------------------------------------------
-#    PUT -> Editar reserva (con revalidación)
-# ----------------------------------------------
+# ---------------------------
+#    PUT -> Editar reserva
+# ---------------------------
 @router.put("/{reservation_id}", response_model=ReservationResponse)
-def edit_reservation(reservation_id: int, update: ReservationUpdate, db: Session = Depends(get_db)):
+def edit_reservation(
+    reservation_id: int,
+    update: ReservationUpdate,
+    db: Session = Depends(get_db),
+    permission = Depends(require_owner_or_admin)
+):
+    """
+    - Solo el dueño puede editar su reserva
+    - Admin puede editar cualquiera
+    - Otros usuarios → 403 Forbidden
+    """
 
     reservation = get_reservation_by_id(db, reservation_id)
 
@@ -101,9 +118,9 @@ def edit_reservation(reservation_id: int, update: ReservationUpdate, db: Session
         raise HTTPException(status_code=404, detail="Reserva no existe")
     
     try:
-        updated = update_reservation(db, reservation, update)
-        return update
-    
+        updated = update_reservation(db, reservation, update) 
+        return updated
+        
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -116,7 +133,16 @@ def edit_reservation(reservation_id: int, update: ReservationUpdate, db: Session
 #    DELETE -> Cancelar/eliminar reserva
 # -----------------------------------------
 @router.delete("/{reservation_id}", status_code=204)
-def remove_reservation(reservation_id: int, db: Session = Depends(get_db)):
+def remove_reservation(
+    reservation_id: int,
+    db: Session = Depends(get_db),
+    permission = Depends(require_owner_or_admin)
+):
+    """
+    - Solo el dueño puede cancelar su propia reserva
+    - Admin puede cancelar cualquiera
+    - Otros usuarios → 403 Forbidden
+    """
 
     reservation = get_reservation_by_id(db, reservation_id)
 
