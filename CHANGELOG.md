@@ -35,6 +35,13 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
 
 ---
 
+### [0.7.0] - Roles y Autorización JWT
+ - Añadido middleware de autenticación
+ - Creado endpoint de login y emisión de tokens
+ - Integrado `OAuth2PasswordBearer`
+ - Añadido decorador `require_admin` para permisos elevados
+ - Probado con ThunderClient 
+
 ### ⭐ Notas
 - Este proyecto sigue GitFlow:  
 `main` → versiones estables  
