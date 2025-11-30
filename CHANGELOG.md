@@ -120,6 +120,14 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
  - Añadido decorador `require_admin` para permisos elevados
  - Probado con ThunderClient 
 
+---
+### [v0.8.0] - Roles & Permisos con JWT
+- Añadido sistema de acceso por Roles (`user` / `admin`)
+- Implementada dependencia `require_admin` para autorizar endpoints sólo admin
+- Reservas ahora solo pueden listarse globalmente por admin, usuarios sólo ven las suyas
+
+---
+
 ### ⭐ Notas
 - Este proyecto sigue GitFlow:  
 `main` → versiones estables  
