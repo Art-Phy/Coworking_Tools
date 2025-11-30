@@ -19,11 +19,89 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
 
 ---
 
-### [Sin publicar]
-#### 🚧 En progreso
-- Modelos principales (`User`, `Tool`, `Reservation`).
-- Configuración inicial de Alembic para migraciones.
-- Preparación para la versión **v0.2.0**.
+### [v0.2.0] - 2025-xx-xx
+#### 🚀 Añadido
+- Creación de los modelos principales del dominio usando SQLAlchemy:
+  - `User`
+  - `Tool`
+  - `Reservation`
+- Configuración completa y profesional de Alembic:
+  - Integración con `settings.DATABASE_URL`
+  - Importación automática de metadatos
+  - Modo `online` y `offline`
+  - Compatible con SQLite en desarrollo
+- Generación de la migración inicial:
+  - `users`
+  - `tools`
+  - `reservations`
+- Creación de la base mediante `alembic upgrade head`
+
+---
+
+### [v0.3.0] - 2025-xx-xx
+#### 🚀 Añadido
+- Schemas Pydantic para Tools:
+  - `ToolBase`, `ToolCreate`, `ToolUpdate`, `ToolResponse`
+- CRUD completo de herramientas usando SQLAlchemy 2.0:
+  - `get_tool_by_id`
+  - `get_all_tools`
+  - `create_tool`
+  - `update_tool`
+  - `delete_tool`
+- Router REST para herramientas:
+  - `POST /tools/`
+  - `GET /tools/`
+  - `GET /tools/{id}`
+  - `PUT /tools/{id}`
+  - `DELETE /tools/{id}`
+- Integración del router de Tools en `main.py`.
+- Documentación automática en OpenAPI.
+
+#### 🛠 Mejorado
+- Validación y manejo de errores con `HTTPException`.
+- Actualización parcial de modelos usando `exclude_unset=True`.
+
+#### 🧪 Probado
+- Endpoints probados correctamente con Thunder Client.
+- Casos normales: creación, consulta, actualización y borrado.
+
+---
+### [v0.4.0] - 2025-xx-xx
+#### 🚀 Añadido
+- Schemas completos para Users
+- CRUD con hashing de contraseña y validación email único
+- Router REST con endpoints de creación, listado, detalle y actualización
+- Integración de Users a la API
+
+#### 🔐 Seguridad
+- Contraseñas hasheadas con bcrypt
+- Nunca se expone password en la API
+
+#### 🧪 Probado
+- POST /users/ (creación)
+- GET /users/ (listado)
+- GET /users/{id}
+- PUT /users/{id}
+
+---
+
+### [v0.5.0] - 2025-xx-xx
+#### 🚀 Añadido
+- Sistema completo de reservas
+- Validación anti-solapamiento
+- Endpoints CRUD para Reservations
+- Integración con Users y Tools
+
+#### 🧠 Reglas de negocio
+- No se permiten reservas activas que se superpongan en tiempo
+- Validación de fechas tanto en creación como en actualización
+
+#### 🧪 Probado
+- POST /reservations
+- GET /reservations
+- GET /reservations/{id}
+- PUT /reservations/{id}
+- DELETE /reservations/{id}
 
 ---
 

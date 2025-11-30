@@ -11,7 +11,10 @@ from app.schemas.reservation import ReservationCreate, ReservationUpdate
 #    Obtener reserva por ID
 # ----------------------------
 def get_reservation_by_id(db: Session, reservation_id: int) -> Reservation | None:
-    return db.scalars(select(Reservation).where(Reservation.id == reservation_id))
+    return db.scalars(
+        select(Reservation).where(Reservation.id == reservation_id)
+    ).first()
+
 
 
 
