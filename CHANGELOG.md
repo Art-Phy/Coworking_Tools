@@ -127,6 +127,12 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
 - Reservas ahora solo pueden listarse globalmente por admin, usuarios sólo ven las suyas
 
 ---
+### [v0.9.0] - Gestión avanzada de reservas
+- Usuarios pueden modificar y cancelar sus propias reservas
+- Admin mantiene control total sobre todas las reservas
+- Lógica anti-solape preservada con validaciones API
+
+---
 
 ### ⭐ Notas
 - Este proyecto sigue GitFlow:  
