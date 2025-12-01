@@ -1,22 +1,43 @@
 
 from fastapi import FastAPI
+
+# Routers
 from app.api.routers.health import router as health_router
 from app.api.routers.tools import router as tools_router
 from app.api.routers.users import router as users_router
 from app.api.routers.reservations import router as reservations_router
 from app.api.routers.auth import router as auth_router
 
+# Logging
+from app.core.logging_config import init_logging
 
-# fastapi dev app/main.py --reload  
 
+# ========================================================
+#                   APLICACIÓN PRINCIPAL
+# ========================================================
 app = FastAPI(
     title="Coworking Tools API",
-    description="API para gestionar usuarios, herramientas y reservas.",
-    version="0.3.0", # Informativa a nivel de documentación FastAPI
+    description="Sistema completo de gestión de herramientas compartidas en espacios coworking. ✔ Users + ✔ Tools + ✔ Reservations + 🔐 JWT + 🛂 Roles admin.",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
 
-# Incluir routers
+
+# ========================================================
+#                        STARTUP
+# ========================================================
+@app.on_event("startup")
+def startup_event():
+    """Se ejecuta automáticamente al iniciar el servidor."""
+    init_logging()     # <<< Logging profesional activado
+    print("\n🚀 API iniciada correctamente con LOGGING habilitado\n")
+
+
+# ========================================================
+#                       ROUTERS
+# ========================================================
 app.include_router(health_router)
 app.include_router(tools_router)
 app.include_router(users_router)
@@ -24,26 +45,21 @@ app.include_router(reservations_router)
 app.include_router(auth_router)
 
 
+# ========================================================
+#                      ENDPOINTS BASE
+# ========================================================
 @app.get("/health")
 def health_check():
-    """
-    Endpoint sencillo para comprobar que la API está viva.
-
-    En producción, este tipo de endpoint suele usarse por sistemas de monitorización
-    o balanceadores de carga para verificar que el servicio está funcionando.
-    """
+    """Para comprobar que la API está viva."""
     return {"status": "ok"}
+
 
 @app.get("/")
 def root():
-    """
-    Endpoint raíz de bienvenida.
-
-    Este endpoint no es estrictamente necesario, pero es útil mientras desarrollamos
-    para ver rápidamente que la API responde yu para mostrar una pequeña descripción.
-    """
-    return{
+    """Pantalla de presentación de la API."""
+    return {
         "message": "Bienvenido a la Shared Tools Reservation API",
         "docs_url": "/docs",
         "health_url": "/health",
+        "version": "1.0.0",
     }
