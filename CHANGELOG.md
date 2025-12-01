@@ -133,6 +133,13 @@ y la numeración de versiones basada en [Semantic Versioning](https://semver.org
 - Lógica anti-solape preservada con validaciones API
 
 ---
+### [v1.0.0] - Estable y Lista para Producción
+- Sistema de logging profesional con rotación
+- Estándares finales revisados
+- Proyecto 100% funcional con roles, reservas y seguridad JWT
+- Primera versión oficial de lanzamiento
+
+---
 
 ### ⭐ Notas
 - Este proyecto sigue GitFlow:  
