@@ -19,6 +19,8 @@ class User(Base):
     is_admin = Column(Boolean, default=False)
 
     # Relación con Reservation
+    role = Column(String, default="user")  # roles: user, admin
+
     reservations = relationship("Reservation", back_populates="user")
 
 
