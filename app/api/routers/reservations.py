@@ -104,26 +104,26 @@ def edit_reservation(
     reservation_id: int,
     update: ReservationUpdate,
     db: Session = Depends(get_db),
-    permission = Depends(require_owner_or_admin)
+    current_user = Depends(get_current_user)
 ):
-    """
-    - Solo el dueño puede editar su reserva
-    - Admin puede editar cualquiera
-    - Otros usuarios → 403 Forbidden
-    """
 
     reservation = get_reservation_by_id(db, reservation_id)
 
     if not reservation:
         raise HTTPException(status_code=404, detail="Reserva no existe")
-    
+
+    # Admin puede editar cualquier reserva
+    # Usuario solo puede modificar las suyas
+    if reservation.user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="No puedes modificar reservas ajenas")
+
     try:
-        updated = update_reservation(db, reservation, update) 
+        updated = update_reservation(db, reservation, update)
         return updated
-        
+
     except ValueError as e:
         raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
+            status_code=409,
             detail=str(e)
         )
 
@@ -136,18 +136,18 @@ def edit_reservation(
 def remove_reservation(
     reservation_id: int,
     db: Session = Depends(get_db),
-    permission = Depends(require_owner_or_admin)
+    current_user = Depends(get_current_user)
 ):
-    """
-    - Solo el dueño puede cancelar su propia reserva
-    - Admin puede cancelar cualquiera
-    - Otros usuarios → 403 Forbidden
-    """
 
     reservation = get_reservation_by_id(db, reservation_id)
 
     if not reservation:
         raise HTTPException(status_code=404, detail="No existe esa reserva")
-    
+
+    # Solo el dueño o un admin pueden eliminar
+    if reservation.user_id != current_user.id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="No tienes permisos para eliminar esta reserva")
+
     delete_reservation(db, reservation)
     return None
+
