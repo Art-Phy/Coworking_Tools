@@ -1,5 +1,14 @@
 
 ### 🛠 Coworking Tools API — v1.0.0
+<p align="left">
+  <img src="https://img.shields.io/badge/Python-3.11+-blue.svg" />
+  <img src="https://img.shields.io/badge/FastAPI-REST-green?logo=fastapi" />
+  <img src="https://img.shields.io/badge/SQLAlchemy-ORM-red" />
+  <img src="https://img.shields.io/badge/JWT-Auth-orange" />
+  <img src="https://img.shields.io/badge/Roles-Admin%20%7C%20User-purple" />
+  <img src="https://img.shields.io/badge/Status-v1.0.0%20Stable-success" />
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey" />
+</p>
 
 Sistema profesional para gestión de herramientas compartidas en espacios coworking.  
 Incluye **reservas en tiempo real**, validación anti-solapamiento, roles Admin/User y seguridad con **JWT**.
